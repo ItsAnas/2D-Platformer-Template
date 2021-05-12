@@ -4,8 +4,9 @@ CXXFLAGS=-Wall -Werror -pedantic -std=c++17  -Wno-missing-braces
 INC=-Iinclude
 LIB=-L lib/ -lraylib -lopengl32 -lgdi32 -lwinmm
 
-SRCDIR=src
-SOURCES  = $(wildcard $(SRCDIR)/*.cc)
+SOURCES= src/main.cc \
+		src/player/player.cc \
+		src/player/subplayer/subplayer.cc
 
 .PHONY: all clean
 

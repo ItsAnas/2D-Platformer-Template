@@ -13,7 +13,7 @@
 
 #include "raylib.h"
 #include "raymath.h"
-#include "player/player.hh"
+#include "player/subplayer/subplayer.hh"
 
 #define G 400
 #define PLAYER_JUMP_SPD 350.0f
@@ -49,7 +49,7 @@ int main(void)
     // player.position = Vector2{400, 280};
     // player.speed = 0;
     // player.canJump = false;
-    Player player(Vector2{400, 280});
+    Subplayer player(Vector2{400, 280}, 42);
 
     EnvItem envItems[] = {
         {{0, 0, 1000, 400}, 0, LIGHTGRAY},
@@ -154,6 +154,7 @@ void UpdatePlayer(Player &player, EnvItem *envItems, int envItemsLength, float d
     {
         player.speed = -PLAYER_JUMP_SPD;
         player.canJump = false;
+        player.print_random_shit();
     }
 
     int hitObstacle = 0;
