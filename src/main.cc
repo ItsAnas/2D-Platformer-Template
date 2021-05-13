@@ -10,13 +10,6 @@
 #define PLAYER_JUMP_SPD 350.0f
 #define PLAYER_HOR_SPD 200.0f
 
-// typedef struct Player
-// {
-//     Vector2 position;
-//     float speed;
-//     bool canJump;
-// } Player;
-
 typedef struct EnvItem
 {
     Rectangle rect;
@@ -95,7 +88,6 @@ int main(void)
         // Call update camera function by its pointer
         cameraUpdaters[cameraOption](&camera, player, deltaTime, screenWidth,
                                      screenHeight);
-        //----------------------------------------------------------------------------------
 
         // Draw
         //----------------------------------------------------------------------------------
