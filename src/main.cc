@@ -24,7 +24,7 @@ typedef struct EnvItem
     Color color;
 } EnvItem;
 
-void UpdatePlayer(Player &player, World w, int envItemsLength, float delta);
+void UpdatePlayer(Player &player, World world, int envItemsLength, float delta);
 void UpdateCameraPlayerBoundsPush(Camera2D *camera, Player &player, float delta,
                                   int width, int height);
 
@@ -35,23 +35,17 @@ int main(void)
     const int screenWidth = 800;
     const int screenHeight = 450;
 
-    InitWindow(screenWidth, screenHeight, "raylib [core] example - 2d camera");
+    InitWindow(screenWidth, screenHeight, "raylib 2D Platformer template");
 
     Player player(Vector2{ 400, 280 });
 
-    // EnvItem envItems[] = { { { 0, 0, 1000, 400 }, 0, LIGHTGRAY },
-    //                        { { 0, 400, 1000, 200 }, 1, GRAY },
-    //                        { { 300, 200, 400, 10 }, 1, GRAY },
-    //                        { { 250, 300, 100, 10 }, 1, GRAY },
-    //                        { { 650, 300, 100, 10 }, 1, GRAY } };
+    World world({ { { 0, 0, 1000, 400 }, 0, LIGHTGRAY },
+                  { { 0, 400, 1000, 200 }, 1, GRAY },
+                  { { 300, 200, 400, 10 }, 1, GRAY },
+                  { { 250, 300, 100, 10 }, 1, GRAY },
+                  { { 650, 300, 100, 10 }, 1, GRAY } });
 
-    World w({ { { 0, 0, 1000, 400 }, 0, LIGHTGRAY },
-              { { 0, 400, 1000, 200 }, 1, GRAY },
-              { { 300, 200, 400, 10 }, 1, GRAY },
-              { { 250, 300, 100, 10 }, 1, GRAY },
-              { { 650, 300, 100, 10 }, 1, GRAY } });
-
-    int envItemsLength = w.CountBlocks();
+    int envItemsLength = world.CountBlocks();
 
     Camera2D camera = { 0 };
     camera.target = player.position;
@@ -80,7 +74,7 @@ int main(void)
         //----------------------------------------------------------------------------------
         float deltaTime = GetFrameTime();
 
-        UpdatePlayer(player, w, envItemsLength, deltaTime);
+        UpdatePlayer(player, world, envItemsLength, deltaTime);
 
         camera.zoom += ((float)GetMouseWheelMove() * 0.05f);
 
@@ -111,9 +105,7 @@ int main(void)
 
         BeginMode2D(camera);
 
-        // for (int i = 0; i < envItemsLength; i++)
-        //     DrawRectangleRec(envItems[i].rect, envItems[i].color);
-        w.Draw();
+        world.Draw();
 
         Rectangle playerRect = { player.position.x - 20, player.position.y - 40,
                                  40, 40 };
@@ -126,7 +118,6 @@ int main(void)
         DrawText("- Space to jump", 40, 60, 10, DARKGRAY);
         DrawText("- Mouse Wheel to Zoom in-out, R to reset zoom", 40, 80, 10,
                  DARKGRAY);
-        DrawText("- C to change camera mode", 40, 100, 10, DARKGRAY);
         DrawText("Current camera mode:", 20, 120, 10, BLACK);
         DrawText(cameraDescriptions[cameraOption], 40, 140, 10, DARKGRAY);
 
@@ -142,7 +133,7 @@ int main(void)
     return 0;
 }
 
-void UpdatePlayer(Player &player, /*EnvItem */ /*envItems*/ World w,
+void UpdatePlayer(Player &player, /*EnvItem */ /*envItems*/ World world,
                   int envItemsLength, float delta)
 {
     if (IsKeyDown(KEY_LEFT))
@@ -155,21 +146,7 @@ void UpdatePlayer(Player &player, /*EnvItem */ /*envItems*/ World w,
         player.canJump = false;
     }
 
-    // int hitObstacle = 0;
-    // for (int i = 0; i < envItemsLength; i++)
-    // {
-    //     EnvItem *ei = envItems + i;
-    //     Vector2 *p = &(player.position);
-    //     if (ei->blocking && ei->rect.x <= p->x
-    //         && ei->rect.x + ei->rect.width >= p->x && ei->rect.y >= p->y
-    //         && ei->rect.y < p->y + player.speed * delta)
-    //     {
-    //         hitObstacle = 1;
-    //         player.speed = 0.0f;
-    //         p->y = ei->rect.y;
-    //     }
-    // }
-    bool hitObstacle = w.CheckCollision(player, delta);
+    bool hitObstacle = world.CheckCollision(player, delta);
 
     if (!hitObstacle)
     {
